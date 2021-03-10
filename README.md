@@ -106,4 +106,5 @@ use `sk::make_pmr_buffer_adapter(b)`.  The return type will be one of
 `sk::pmr_buffer<T>` depending on the capabilities of `b`.
 
 Note that the returned buffer adapter object holds a reference to `b` 
-for its lifetime.
+for its lifetime; therefore `b` should not be destroyed before the
+adapter is.
