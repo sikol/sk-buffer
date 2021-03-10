@@ -25,32 +25,33 @@ submodules) and link with the sk-buffer library.
 
 * `sk::basic_buffer<T>`:
     * A base type for all buffers.
-    * Type `T::value_type`: type of object stored in the buffer.
-    * Type `T::const_value_type`: `std::add_const_t<value_type>`
-    * Type `T::size_type`: integral type that can represent the size of the buffer.
-    * Fn `T::clear()`: Reset the buffer to its default, empty state, discarding
+    * Type `value_type`: type of object stored in the buffer.
+    * Type `const_value_type`: `std::add_const_t<value_type>`
+    * Type `size_type`: integral type that can represent the 
+      size of the buffer.
+    * Fn `clear()`: Reset the buffer to its default, empty state, discarding
       any data it contains. 
 
 * `sk::readable_buffer<T>`:
     * A buffer that can be read from.
-    * Fn `T::readable_ranges() -> std::vector<std::span<const_value_type>>`:
+    * Fn `readable_ranges() -> std::vector<std::span<const_value_type>>`:
       Return a list of contiguous ranges which contain data in the buffer.
       Data in the ranges can be copied or passed to data-consuming functions.
-    * Fn `T::discard(size_type n) -> size_type`: Discard up to `n` objects
+    * Fn `discard(size_type n) -> size_type`: Discard up to `n` objects
       from the start of the buffer.  Returns the number of objects discarded.
-    * Fn `T::read(std::ranges::contiguous_range &r) -> size_type`:
+    * Fn `read(std::ranges::contiguous_range &r) -> size_type`:
       Copy data from the buffer into `r`, then discard the copied objects.
       Returns the number of objects copied.
 
 * `sk::writable_buffer<T>`:
     * A buffer that can be written to.
-    * Fn `T::writable_ranges() -> std::vector<std::span<value_type>>`:
+    * Fn `writable_ranges() -> std::vector<std::span<value_type>>`:
       Return a list of contiguous ranges which refer to empty space in the buffer.
       Data can be written to the empty space.
-    * Fn `T::commit(size_type n)`: Mark up to `n` objects at the start of the
+    * Fn `commit(size_type n)`: Mark up to `n` objects at the start of the
       buffer's empty space as readable data.  Returns the number of objects
       committed.
-    * Fn `T::write(std::ranges::contiguous_range const &r) -> size_type`:
+    * Fn `write(std::ranges::contiguous_range const &r) -> size_type`:
       Copy objects from `r` into the buffer, then commit the number of
       objects copied.  Returns the number of objects copied.
 
@@ -88,17 +89,21 @@ submodules) and link with the sk-buffer library.
 
 * `sk::pmr_readable_buffer<T>`: An abstract base class that represents a 
   runtime-polymorphic readable buffer.  This provides the same interface
-  as `sk::readable_buffer<T>` except that all ranges are be `std::span`.
+  as `sk::readable_buffer<T>` except that all ranges are `std::span`.
 
 * `sk::pmr_writable_buffer<T>`: An abstract base class that represents a 
   runtime-polymorphic writable buffer.  This provides the same interface
-  as `sk::writable_buffer<T>` except that all ranges are be `std::span`.
+  as `sk::writable_buffer<T>` except that all ranges are `std::span`.
 
 * `sk::pmr_buffer<T>`: An abstract base class that represents a 
   runtime-polymorphic buffer which is both readable and writable.  This
   provides the same interface as `sk::buffer<T>` except that all ranges
-  are be `std::span`.
+  are `std::span`.
 
 To create a runtime-polymorphic buffer from an existing buffer `b`,
-use `sk::make_pmr_buffer_adapter(b)`.  Note that the returned buffer
-adapter object holds a reference to `b` for its lifetime.
+use `sk::make_pmr_buffer_adapter(b)`.  The return type will be one of
+`sk::pmr_readable_buffer<T>`, `sk::pmr_writable_buffer<T>` or
+`sk::pmr_buffer<T>` depending on the capabilities of `b`.
+
+Note that the returned buffer adapter object holds a reference to `b` 
+for its lifetime.
