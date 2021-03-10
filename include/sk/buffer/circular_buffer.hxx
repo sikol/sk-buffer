@@ -291,14 +291,15 @@ namespace sk {
 
         if (read_pointer > write_pointer) {
             // Write between write_pointer and read_pointer - 1.
-            auto can_write = std::min(static_cast<array_type::size_type>(
-                                          read_pointer - data.begin() - 1),
-                                      bytes_left);
+            auto can_write =
+                std::min(static_cast<typename array_type::size_type>(
+                             read_pointer - data.begin() - 1),
+                         bytes_left);
             assert(can_write >= 0);
 
             bytes_written += can_write;
             write_pointer +=
-                static_cast<array_type::difference_type>(can_write);
+                static_cast<typename array_type::difference_type>(can_write);
             assert(write_pointer < read_pointer);
         }
 

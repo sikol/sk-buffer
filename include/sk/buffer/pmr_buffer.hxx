@@ -132,8 +132,10 @@ namespace sk {
             return buffer_base.readable_ranges();
         }
 
-        auto discard(pmr_readable_buffer<buffer_value_t<Buffer>>::size_type n)
-            -> pmr_readable_buffer<buffer_value_t<Buffer>>::size_type final {
+        auto discard(
+            typename pmr_readable_buffer<buffer_value_t<Buffer>>::size_type n)
+            -> typename pmr_readable_buffer<buffer_value_t<Buffer>>::size_type
+            final {
             return buffer_base.discard(n);
         }
     };
@@ -162,8 +164,9 @@ namespace sk {
             return buffer_base.writable_ranges();
         }
 
-        auto commit(pmr_writable_buffer<buffer_value_t<Buffer>>::size_type n) ->
-            typename pmr_writable_buffer<buffer_value_t<Buffer>>::size_type
+        auto commit(
+            typename pmr_writable_buffer<buffer_value_t<Buffer>>::size_type n)
+            -> typename pmr_writable_buffer<buffer_value_t<Buffer>>::size_type
             final {
             return buffer_base.commit(n);
         }
@@ -179,8 +182,8 @@ namespace sk {
                                 pmr_writable_buffer_adapter<Buffer> {
 
         pmr_buffer_adapter(Buffer &buffer_base_)
-            : pmr_readable_buffer_adapter<Buffer>(buffer_base_)
-            , pmr_writable_buffer_adapter<Buffer>(buffer_base_) {}
+            : pmr_readable_buffer_adapter<Buffer>(buffer_base_),
+              pmr_writable_buffer_adapter<Buffer>(buffer_base_) {}
     };
 
     /*
