@@ -53,10 +53,10 @@ namespace sk {
 
     template <typename Char, std::size_t buffer_size> struct fixed_buffer {
         using array_type = std::array<Char, buffer_size>;
-        using value_type = array_type::value_type;
+        using value_type = typename array_type::value_type;
         using const_value_type = std::add_const_t<value_type>;
-        using iterator = array_type::iterator;
-        using size_type = array_type::size_type;
+        using iterator = typename array_type::iterator;
+        using size_type = typename array_type::size_type;
 
         // Create a new, empty buffer.
         fixed_buffer()
