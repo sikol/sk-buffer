@@ -22,7 +22,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: |
         call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        cmake -G Ninja -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DSK_ERROR_BUILD_TESTS:BOOL=ON ..
+        cmake -G Ninja -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake -DSK_BUFFER_BUILD_TESTS:BOOL=ON ..
 
     - name: Build
       working-directory: ${{github.workspace}}/build
