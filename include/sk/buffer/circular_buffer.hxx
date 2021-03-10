@@ -29,11 +29,11 @@
 #ifndef SK_BUFFER_CIRCULAR_BUFFER_HXX_INCLUDED
 #define SK_BUFFER_CIRCULAR_BUFFER_HXX_INCLUDED
 
-#include <cassert>
-#include <span>
-#include <ranges>
 #include <algorithm>
 #include <array>
+#include <cassert>
+#include <ranges>
+#include <span>
 
 #include "sk/buffer/buffer.hxx"
 
@@ -179,7 +179,7 @@ namespace sk {
             std::add_const_t<std::ranges::range_value_t<InRange>>> {
 
         size_type bytes_written = 0;
-        std::span<const_value_type> data_left{ buf };
+        std::span<const_value_type> data_left{buf};
 
         for (auto &&range : writable_ranges()) {
             auto can_write =
@@ -228,12 +228,12 @@ namespace sk {
 
             // Set write_pointer past the data we write.
             theoretical_write_pointer +=
-                static_cast<array_type::difference_type>(span.size());
+                static_cast<typename array_type::difference_type>(span.size());
 
             // write_pointer may be left pointing at end(); if there's
             // space left at the start of the buffer, wrap it now.
-            if (theoretical_write_pointer == data.end()
-                && read_pointer != data.begin())
+            if (theoretical_write_pointer == data.end() &&
+                read_pointer != data.begin())
                 theoretical_write_pointer = data.begin();
         }
 
@@ -267,9 +267,10 @@ namespace sk {
                 wend--;
 
             // Write between write_pointer and the end of the buffer.
-            auto can_write = std::min(
-                static_cast<array_type::size_type>(wend - write_pointer),
-                bytes_left);
+            auto can_write =
+                std::min(static_cast<typename array_type::size_type>(
+                             wend - write_pointer),
+                         bytes_left);
             assert(can_write >= 0);
 
             bytes_left -= can_write;
@@ -313,11 +314,10 @@ namespace sk {
         requires std::same_as<value_type, std::ranges::range_value_t<InRange>> {
 
         size_type bytes_read = 0;
-        std::span<value_type> data_left{ buf };
+        std::span<value_type> data_left{buf};
 
         for (auto &&range : readable_ranges()) {
-            auto can_read =
-                std::min(data_left.size(), range.size());
+            auto can_read = std::min(data_left.size(), range.size());
             std::ranges::copy(range.subspan(0, can_read), data_left.begin());
             data_left = data_left.subspan(can_read);
             bytes_read += can_read;
@@ -348,12 +348,12 @@ namespace sk {
         // If read_pointer > write_pointer, we can read from read_pointer
         // until the end of the buffer.
         if (theoretical_read_pointer > write_pointer) {
-            auto can_read = static_cast<array_type::size_type>(
+            auto can_read = static_cast<typename array_type::size_type>(
                 data.end() - theoretical_read_pointer);
             auto span = std::span<const_value_type>(
                 theoretical_read_pointer,
-                theoretical_read_pointer
-                    + static_cast<std::ptrdiff_t>(can_read));
+                theoretical_read_pointer +
+                    static_cast<std::ptrdiff_t>(can_read));
 
             if (!span.empty())
                 ret.push_back(span);
@@ -378,8 +378,8 @@ namespace sk {
 
             auto span = std::span<const_value_type>(
                 theoretical_read_pointer,
-                theoretical_read_pointer
-                    + static_cast<std::ptrdiff_t>(can_read));
+                theoretical_read_pointer +
+                    static_cast<std::ptrdiff_t>(can_read));
 
             if (!span.empty())
                 ret.push_back(span);
@@ -407,8 +407,8 @@ namespace sk {
         // until the end of the buffer.
         if (read_pointer > write_pointer) {
             auto can_read = std::min(
-                bytes_left,
-                static_cast<array_type::size_type>(data.end() - read_pointer));
+                bytes_left, static_cast<typename array_type::size_type>(
+                                data.end() - read_pointer));
 
             bytes_left -= can_read;
             bytes_read += can_read;

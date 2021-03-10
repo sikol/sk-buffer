@@ -29,13 +29,13 @@
 #ifndef SK_BUFFER_DYNAMIC_BUFFER_HXX_INCLUDED
 #define SK_BUFFER_DYNAMIC_BUFFER_HXX_INCLUDED
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <type_traits>
-#include <ranges>
-#include <algorithm>
-#include <span>
 #include <deque>
+#include <ranges>
+#include <span>
+#include <type_traits>
 
 #include "sk/buffer/buffer.hxx"
 #include "sk/buffer/fixed_buffer.hxx"
@@ -134,8 +134,8 @@ namespace sk {
         // Ensure that at least minfree objects of write space is available.
         auto ensure_minfree() -> void {
             // Add more space if needed.
-            if (extents.empty()
-                || extents.back().write_window.size() < minfree) {
+            if (extents.empty() ||
+                extents.back().write_window.size() < minfree) {
 
                 extents.emplace_back();
                 // Make sure write_pointer doesn't point at an empty extent.
@@ -144,7 +144,7 @@ namespace sk {
             }
         }
 
-    private:
+      private:
         // Remove the first element of the buffer.
         auto remove_front() -> void;
     };
@@ -179,8 +179,8 @@ namespace sk {
             // Every extent aside from the current write pointer must be empty,
             // or else we have written data in front of the pointer without
             // adjusting it, which is a bug.
-            assert(i == write_pointer
-                   || (extents[i].write_window.size() == extent_size));
+            assert(i == write_pointer ||
+                   (extents[i].write_window.size() == extent_size));
 
             // Add this extent to the range list.
             ret.push_back(extents[i].write_window);
@@ -198,9 +198,10 @@ namespace sk {
 
         assert(write_pointer >= 0 && write_pointer < extents.size());
 
-        assert(
-            write_pointer < static_cast<extent_list_type::size_type>(
-                std::numeric_limits<extent_list_type::difference_type>::max()));
+        assert(write_pointer <
+               static_cast<typename extent_list_type::size_type>(
+                   std::numeric_limits<
+                       typename extent_list_type::difference_type>::max()));
 
         for (;;) {
             // If we reach the end of the buffer, we have run out of data
@@ -349,6 +350,6 @@ namespace sk {
         }
     }
 
-} // namespace yarrow
+} // namespace sk
 
 #endif // SK_BUFFER_DYNAMIC_BUFFER_HXX_INCLUDED
