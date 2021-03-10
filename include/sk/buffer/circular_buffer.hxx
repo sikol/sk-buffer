@@ -278,7 +278,7 @@ namespace sk {
 
             // Set write_pointer past the data we write.
             write_pointer +=
-                static_cast<array_type::difference_type>(can_write);
+                static_cast<typename array_type::difference_type>(can_write);
 
             // write_pointer may be left pointing at end(); if there's
             // space left at the start of the buffer, wrap it now.
@@ -372,7 +372,7 @@ namespace sk {
         // If read_pointer < write_pointer, we can read from read_pointer
         // up to write_pointer.
         if (theoretical_read_pointer < write_pointer) {
-            auto can_read = static_cast<array_type::size_type>(
+            auto can_read = static_cast<typename array_type::size_type>(
                 write_pointer - theoretical_read_pointer);
             assert(can_read >= 0);
 
@@ -426,9 +426,9 @@ namespace sk {
         // If read_pointer < write_pointer, we can read from read_pointer
         // up to write_pointer.
         if (read_pointer < write_pointer) {
-            auto can_read =
-                std::min(bytes_left, static_cast<array_type::size_type>(
-                                         write_pointer - read_pointer));
+            auto can_read = std::min(
+                bytes_left, static_cast<typename array_type::size_type>(
+                                write_pointer - read_pointer));
             assert(can_read >= 0);
 
             read_pointer += static_cast<ptrdiff_t>(can_read);
