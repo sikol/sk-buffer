@@ -19,6 +19,18 @@ Copy header files into your source tree. If your project uses CMake,
 you can add the entire project as a subdirectory (e.g., with Git
 submodules) and link with the sk-buffer library.
 
+## Supported compilers
+
+Tested with:
+
+* MSVC 19.28 (VS 16.9) on Windows
+* Clang 11.0.0 on Windows
+
+Known not to work (patches welcome):
+
+* Clang 10.0.0 on Linux
+* GCC 10.2.0 on Linux
+
 ## API reference
 
 ### Concepts

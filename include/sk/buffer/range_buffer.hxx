@@ -93,8 +93,8 @@ namespace sk {
         readable_buffer_of<readable_range_buffer<std::span<char>>, char>);
 
     // Create a readable_range_buffer from a range.
-    auto
-    make_readable_range_buffer(std::ranges::contiguous_range auto &&range) {
+    template <std::ranges::contiguous_range Range>
+    auto make_readable_range_buffer(Range &&range) {
         using range_type = std::remove_reference_t<decltype(range)>;
         return readable_range_buffer<range_type>(range);
     }
@@ -145,8 +145,8 @@ namespace sk {
     static_assert(writable_buffer<writable_range_buffer<std::span<char>>>);
 
     // Create a writable_range_buffer from a range.
-    auto
-    make_writable_range_buffer(std::ranges::contiguous_range auto &&range) {
+    template <std::ranges::contiguous_range Range>
+    auto make_writable_range_buffer(Range &&range) {
         using range_type = std::remove_reference_t<decltype(range)>;
         return writable_range_buffer<range_type>(range);
     }
